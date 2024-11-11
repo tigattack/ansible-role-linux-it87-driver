@@ -1,0 +1,6 @@
+---
+
+- name: Remove cloned repository
+  ansible.builtin.file:
+    path: "{{ linux_it87_driver_clone_path }}"
+    state: absent

@@ -1,0 +1,10 @@
+---
+
+- name: Include task
+  ansible.builtin.include_tasks:
+    file: >-
+      {{
+        'install.yml' if linux_it87_driver_state in ['present', 'latest']
+        else 'uninstall.yml' if linux_it87_driver_state == 'absent'
+        else undef()
+      }}

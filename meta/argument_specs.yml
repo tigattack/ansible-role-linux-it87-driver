@@ -1,0 +1,25 @@
+---
+argument_specs:
+  main:
+    short_description: Install the 'it87' kernel driver for IT86 & IT87 Super I/O chips.
+    description:
+      - Install, update, or uninstall the 'it87' kernel driver for IT86 & IT87 Super I/O chips via DKMS.
+      - See https://github.com/frankcrawford/it87 for an up-to-date list of supported chips.
+    version_added: '1.0.0'
+    author: tigattack
+    options:
+      linux_it87_driver_state:
+        type: path
+        default: present
+        choices:
+          - present
+          - latest
+          - absent
+        description: State of the 'it87' kernel driver.
+
+      linux_it87_driver_version:
+        type: str
+        default: HEAD
+        description:
+          - Version of the 'it87' kernel driver.
+          - This can be the literal string 'HEAD', a branch name, or a tag name from https://github.com/frankcrawford/it87

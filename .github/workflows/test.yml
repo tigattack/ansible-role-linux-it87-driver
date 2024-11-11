@@ -1,0 +1,21 @@
+---
+name: Test
+on:
+  push:
+    branches: '*'
+    tags-ignore:
+      - '**'
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ansible/ansible-lint@v24.9.2
+        with:
+          requirements_file: requirements.yml

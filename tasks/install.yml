@@ -1,0 +1,46 @@
+---
+
+- name: Ensure requirements
+  ansible.builtin.apt:
+    name: make
+    state: present
+
+- name: Check if it87 kernel module is installed
+  ansible.builtin.command:
+    cmd: dkms status -m it87
+  register: dkms_status
+  changed_when: false
+  check_mode: false
+
+- name: Uninstall before install
+  ansible.builtin.include_tasks:
+    file: uninstall.yml
+  when:
+    - linux_it87_driver_state == 'latest'
+    - "'it87' in dkms_status.stdout"
+
+- name: Install
+  when: >-
+    (linux_it87_driver_state == 'present' and 'it87' not in dkms_status.stdout)
+    or linux_it87_driver_state == 'latest'
+  block:
+    - name: Clone frankcrawford/it87 repository
+      ansible.builtin.git:
+        repo: https://github.com/frankcrawford/it87.git
+        dest: "{{ linux_it87_driver_clone_path }}"
+        version: "{{ linux_it87_driver_version }}"
+      notify: Remove cloned repository
+
+    - name: Install it87 kernel module
+      ansible.builtin.command:
+        cmd: ./dkms-install.sh
+        chdir: "{{ linux_it87_driver_clone_path }}"
+      register: dkms_install
+      changed_when: dkms_install.rc == 0
+      ignore_errors: "{{ ansible_check_mode }}"
+
+    - name: Ensure kernel module loaded and configured
+      community.general.modprobe:
+        name: it87
+        persistent: present
+        state: present

@@ -1,0 +1,6 @@
+---
+
+# Supports present, latest, absent
+linux_it87_driver_state: present
+
+linux_it87_driver_version: HEAD

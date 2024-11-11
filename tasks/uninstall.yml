@@ -1,0 +1,22 @@
+---
+
+- name: Clone frankcrawford/it87 repository
+  ansible.builtin.git:
+    repo: https://github.com/frankcrawford/it87.git
+    dest: "{{ linux_it87_driver_clone_path }}"
+    version: "{{ linux_it87_driver_version }}"
+  notify: Remove cloned repository
+
+- name: Ensure kernel module unloaded and deconfigured
+  community.general.modprobe:
+    name: it87
+    persistent: absent
+    state: absent
+
+- name: Uninstall it87 kernel module
+  ansible.builtin.command:
+    cmd: ./dkms-remove.sh
+    chdir: "{{ linux_it87_driver_clone_path }}"
+  register: dkms_uninstall
+  changed_when: dkms_uninstall.rc == 0
+  ignore_errors: "{{ ansible_check_mode }}"

@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: tigattack
+  namespace: tigattack
+  role_name: linux_it87_driver
+  description: Install the 'it87' kernel driver for IT86 & IT87 Super I/O chips.
+  license: MIT
+  company: none
+  min_ansible_version: "2.11"
+  galaxy_tags:
+    - system
+    - server
+    - kernel
+    - it87
+dependencies: []
