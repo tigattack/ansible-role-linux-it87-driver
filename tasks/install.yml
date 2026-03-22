@@ -3,6 +3,7 @@
 - name: Ensure requirements
   ansible.builtin.apt:
     name:
+      - dkms
       - linux-headers-{{ ansible_facts.kernel | regex_replace('^[^-]+-', '') }}
       - make
     state: present
