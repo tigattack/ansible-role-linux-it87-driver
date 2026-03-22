@@ -2,7 +2,9 @@
 
 - name: Ensure requirements
   ansible.builtin.apt:
-    name: make
+    name:
+      - linux-headers-{{ ansible_facts.kernel | regex_replace('^[^-]+-', '') }}
+      - make
     state: present
 
 - name: Check if it87 kernel module is installed
